@@ -1,25 +1,24 @@
 #!/usr/bin/env node
 
-let year, month;
+const today = new Date();
+let month = today.getMonth() + 1;
+let year = today.getFullYear();
+
 for (let i = 2; i < process.argv.length; i++) {
   if (
-    process.argv[i] === "-y" &&
-    Number.isInteger(parseInt(process.argv[i + 1]))
-  ) {
-    year = process.argv[i + 1];
-  } else if (
     process.argv[i] === "-m" &&
     Number.isInteger(parseInt(process.argv[i + 1]))
   ) {
-    month = process.argv[i + 1];
+    month = parseInt(process.argv[i + 1]);
+  } else if (
+    process.argv[i] === "-y" &&
+    Number.isInteger(parseInt(process.argv[i + 1]))
+  ) {
+    year = parseInt(process.argv[i + 1]);
   }
 }
 
-const today = new Date();
-month ??= today.getMonth() + 1;
-year ??= today.getFullYear();
 console.log(`      ${month}月 ${year}`);
-
 console.log("日 月 火 水 木 金 土");
 
 const firstDate = new Date(year, month - 1, 1);
