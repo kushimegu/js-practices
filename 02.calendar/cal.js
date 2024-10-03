@@ -1,13 +1,20 @@
 #!/usr/bin/env node
 
 let year, month;
-for (let i = 0; i < process.argv.length; i++) {
-  if (process.argv[i] === "-y") {
+for (let i = 2; i < process.argv.length; i++) {
+  if (
+    process.argv[i] === "-y" &&
+    Number.isInteger(parseInt(process.argv[i + 1]))
+  ) {
     year = process.argv[i + 1];
-  } else if (process.argv[i] === "-m") {
+  } else if (
+    process.argv[i] === "-m" &&
+    Number.isInteger(parseInt(process.argv[i + 1]))
+  ) {
     month = process.argv[i + 1];
   }
 }
+
 const today = new Date();
 month ??= today.getMonth() + 1;
 year ??= today.getFullYear();
