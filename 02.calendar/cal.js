@@ -15,18 +15,15 @@ console.log(`      ${month}月 ${year}`);
 
 console.log("日 月 火 水 木 金 土");
 
-const first_date = new Date(year, month - 1, 1);
-const last_date = new Date(year, month, 0);
-process.stdout.write("   ".repeat(first_date.getDay()));
-for (
-  let date = first_date;
-  date <= last_date;
-  date.setDate(date.getDate() + 1)
-) {
-  process.stdout.write(date.getDate().toString().padStart(2, " "));
+const firstDate = new Date(year, month - 1, 1);
+const lastDate = new Date(year, month, 0);
+process.stdout.write("   ".repeat(firstDate.getDay()));
+for (let i = 1; i <= lastDate.getDate(); i++) {
+  const date = new Date(year, month - 1, i);
+  process.stdout.write(i.toString().padStart(2));
   if (date.getDay() === 6) {
     process.stdout.write("\n");
-  } else {
+  } else if (i !== lastDate.getDate()) {
     process.stdout.write(" ");
   }
 }
