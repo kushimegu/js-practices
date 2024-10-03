@@ -1,16 +1,16 @@
 #!/usr/bin/env node
 
-let argv_year, argv_month;
+let year, month;
 for (let i = 0; i < process.argv.length; i++) {
   if (process.argv[i] === "-y") {
-    argv_year = process.argv[i + 1];
+    year = process.argv[i + 1];
   } else if (process.argv[i] === "-m") {
-    argv_month = process.argv[i + 1];
+    month = process.argv[i + 1];
   }
 }
 const today = new Date();
-const month = (argv_month ||= today.getMonth() + 1);
-const year = (argv_year ||= today.getFullYear());
+month ??= today.getMonth() + 1;
+year ??= today.getFullYear();
 console.log(`      ${month}月 ${year}`);
 
 console.log("日 月 火 水 木 金 土");
