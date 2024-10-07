@@ -24,12 +24,15 @@ console.log("日 月 火 水 木 金 土");
 const firstDate = new Date(year, month - 1, 1);
 const lastDate = new Date(year, month, 0);
 process.stdout.write("   ".repeat(firstDate.getDay()));
-for (let i = 1; i <= lastDate.getDate(); i++) {
-  const date = new Date(year, month - 1, i);
-  process.stdout.write(i.toString().padStart(2));
-  if (date.getDay() === 6) {
+for (
+  let date = new Date(firstDate);
+  date <= lastDate;
+  date.setDate(date.getDate() + 1)
+) {
+  process.stdout.write(date.getDate().toString().padStart(2));
+  if (date.getDay() === 6 || date.getDate() === lastDate.getDate()) {
     process.stdout.write("\n");
-  } else if (i !== lastDate.getDate()) {
+  } else if (date !== lastDate) {
     process.stdout.write(" ");
   }
 }
