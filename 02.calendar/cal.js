@@ -25,14 +25,14 @@ const firstDate = new Date(year, month - 1, 1);
 const lastDate = new Date(year, month, 0);
 process.stdout.write("   ".repeat(firstDate.getDay()));
 for (
-  let date = new Date(firstDate);
+  const date = new Date(firstDate);
   date <= lastDate;
   date.setDate(date.getDate() + 1)
 ) {
   process.stdout.write(date.getDate().toString().padStart(2));
   if (date.getDay() === 6 || date.getDate() === lastDate.getDate()) {
     process.stdout.write("\n");
-  } else if (date !== lastDate) {
+  } else {
     process.stdout.write(" ");
   }
 }
