@@ -6,19 +6,22 @@ db.run(
   function (error) {
     db.run("INSERT INTO books(title) VALUES (?)", function (error) {
       if (error) {
-        return console.log(error);
+        console.log(error);
+      } else {
+        console.log(this.lastID);
       }
-      console.log(this.lastID);
       db.get(
         "SELECT * FROM table WHERE title = ?",
         "JavaScript",
         function (error, row) {
           if (error) {
-            return console.log(error);
+            console.log(error);
+          } else {
+            console.log(row);
           }
-          console.log(row);
-          db.run("DROP TABLE books");
-          db.close();
+          db.run("DROP TABLE books", function () {
+            db.close();
+          });
         },
       );
     });
