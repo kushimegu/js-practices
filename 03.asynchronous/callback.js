@@ -8,7 +8,7 @@ db.run(
       console.log(this.lastID);
       db.get(
         "SELECT * FROM books WHERE title = ?",
-        "JavaScript",
+        ["JavaScript"],
         function (error, row) {
           console.log(row);
           db.run("DROP TABLE books", function () {

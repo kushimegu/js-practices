@@ -3,19 +3,19 @@ const db = new sqlite3.Database(":memory:");
 
 db.run(
   "CREATE TABLE books (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL UNIQUE)",
-  function (error) {
+  function () {
     db.run("INSERT INTO books(title) VALUES (?)", function (error) {
       if (error) {
-        console.log(error);
+        console.log(error.message);
       } else {
         console.log(this.lastID);
       }
       db.get(
         "SELECT * FROM table WHERE title = ?",
-        "JavaScript",
+        ["JavaScript"],
         function (error, row) {
           if (error) {
-            console.log(error);
+            console.log(error.message);
           } else {
             console.log(row);
           }
