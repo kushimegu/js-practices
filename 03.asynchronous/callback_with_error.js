@@ -6,7 +6,7 @@ db.run(
   function () {
     db.run("INSERT INTO books(title) VALUES (?)", function (error) {
       if (error) {
-        console.log(error.message);
+        console.error(error.message);
       } else {
         console.log(this.lastID);
       }
@@ -15,7 +15,7 @@ db.run(
         ["JavaScript"],
         function (error, row) {
           if (error) {
-            console.log(error.message);
+            console.error(error.message);
           } else {
             console.log(row);
           }
