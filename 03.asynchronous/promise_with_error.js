@@ -8,22 +8,20 @@ run(
   "CREATE TABLE books (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL UNIQUE)",
 )
   .then(() =>
-    run(db, "INSERT INTO books (title) VALUES (?)")
-      .then((thisObject) => {
-        console.log(thisObject.lastID);
-      })
-      .catch((error) => {
-        console.error(error.message);
-      }),
-  )
+    run(db, "INSERT INTO books (title) VALUES (?)"))
+  .then((thisObject) => {
+    console.log(thisObject.lastID);
+  })
+  .catch((error) => {
+    console.error(error.message);
+  })
   .then(() =>
-    get(db, "SELECT * FROM table WHERE title = ?", ["JavaScript"])
-      .then((row) => {
-        console.log(row);
-      })
-      .catch((error) => {
-        console.error(error.message);
-      }),
-  )
+    get(db, "SELECT * FROM table WHERE title = ?", ["JavaScript"]))
+  .then((row) => {
+    console.log(row);
+  })
+  .catch((error) => {
+    console.error(error.message);
+  })
   .then(() => run(db, "DROP TABLE books"))
   .then(() => close(db));
