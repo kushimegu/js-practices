@@ -7,7 +7,7 @@ await run(
   db,
   "CREATE TABLE books (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL UNIQUE)",
 );
-const lastId = await run(db, "INSERT INTO books(title) VALUES (?)", [
+const lastId = await run(db, "INSERT INTO books (title) VALUES (?)", [
   "JavaScript",
 ]);
 console.log(lastId);

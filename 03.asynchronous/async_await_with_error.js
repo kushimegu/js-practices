@@ -9,10 +9,10 @@ try {
     "CREATE TABLE books (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL UNIQUE)",
   );
   try {
-    const lastId = await run(db, "INSERT INTO books(title) VALUES (?)");
+    const lastId = await run(db, "INSERT INTO books (title) VALUES (?)");
     console.log(lastId);
   } catch (error) {
-    if (error.code === "SQLITE_CONSTRAINT") {
+    if (error.code && error.code === "SQLITE_CONSTRAINT") {
       console.error(error.message);
     } else {
       throw error;
@@ -24,7 +24,7 @@ try {
     ]);
     console.log(record);
   } catch (error) {
-    if (error.code === "SQLITE_ERROR") {
+    if (error.code && error.code === "SQLITE_ERROR") {
       console.error(error.message);
     } else {
       throw error;
