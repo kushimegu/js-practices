@@ -7,13 +7,13 @@ await run(
   db,
   "CREATE TABLE books (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL UNIQUE)",
 );
-const result = await run(db, "INSERT INTO books (title) VALUES (?)", [
+const thisObject = await run(db, "INSERT INTO books (title) VALUES (?)", [
   "JavaScript",
 ]);
-console.log(result.lastID);
-const record = await get(db, "SELECT * FROM books WHERE title = ?", [
+console.log(thisObject.lastID);
+const row = await get(db, "SELECT * FROM books WHERE title = ?", [
   "JavaScript",
 ]);
-console.log(record);
+console.log(row);
 await run(db, "DROP TABLE books");
 await close(db);

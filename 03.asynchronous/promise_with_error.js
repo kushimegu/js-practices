@@ -9,8 +9,8 @@ run(
 )
   .then(() =>
     run(db, "INSERT INTO books (title) VALUES (?)")
-      .then((result) => {
-        console.log(result.lastID);
+      .then((thisObject) => {
+        console.log(thisObject.lastID);
       })
       .catch((error) => {
         console.error(error.message);
@@ -18,8 +18,8 @@ run(
   )
   .then(() =>
     get(db, "SELECT * FROM table WHERE title = ?", ["JavaScript"])
-      .then((result) => {
-        console.log(result);
+      .then((row) => {
+        console.log(row);
       })
       .catch((error) => {
         console.error(error.message);
