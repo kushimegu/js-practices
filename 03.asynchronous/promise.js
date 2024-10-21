@@ -10,10 +10,10 @@ run(
   .then(() => run(db, "INSERT INTO books (title) VALUES (?)", ["JavaScript"]))
   .then((thisObject) => {
     console.log(thisObject.lastID);
-    get(db, "SELECT * FROM books WHERE title = ?", ["JavaScript"]);
+    return get(db, "SELECT * FROM books WHERE title = ?", ["JavaScript"]);
   })
   .then((row) => {
     console.log(row);
-    run(db, "DROP TABLE books");
+    return run(db, "DROP TABLE books");
   })
   .then(() => close(db));
