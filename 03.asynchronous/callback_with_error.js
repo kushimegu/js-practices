@@ -14,7 +14,7 @@ db.run(
       db.get(
         "SELECT * FROM table WHERE title = ?",
         ["JavaScript"],
-        function (error, row) {
+        (error, row) => {
           if (error) {
             console.error(error.message);
           } else {

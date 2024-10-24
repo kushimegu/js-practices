@@ -1,5 +1,5 @@
 export function run(db, sql, params) {
-  return new Promise(function (resolve, reject) {
+  return new Promise((resolve, reject) => {
     db.run(sql, params, function (error) {
       if (error) {
         reject(error);
@@ -11,8 +11,8 @@ export function run(db, sql, params) {
 }
 
 export function get(db, sql, params) {
-  return new Promise(function (resolve, reject) {
-    db.get(sql, params, function (error, row) {
+  return new Promise((resolve, reject) => {
+    db.get(sql, params, (error, row) => {
       if (error) {
         reject(error);
       } else {
@@ -23,8 +23,8 @@ export function get(db, sql, params) {
 }
 
 export function close(db) {
-  return new Promise(function (resolve, reject) {
-    db.close(function (error) {
+  return new Promise((resolve, reject) => {
+    db.close((error) => {
       if (error) {
         reject(error);
       } else {

@@ -10,7 +10,7 @@ db.run(
       db.get(
         "SELECT * FROM books WHERE title = ?",
         ["JavaScript"],
-        function (_, row) {
+        (_, row) => {
           console.log(row);
           db.run("DROP TABLE books", () => {
             db.close();
