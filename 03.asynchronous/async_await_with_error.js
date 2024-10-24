@@ -9,10 +9,10 @@ await run(
 );
 try {
   try {
-    const thisObject = await run(db, "INSERT INTO books (title) VALUES (?)", [
+    const rowDetail = await run(db, "INSERT INTO books (title) VALUES (?)", [
       null,
     ]);
-    console.log(thisObject.lastID);
+    console.log(rowDetail.lastID);
   } catch (error) {
     if (error instanceof Error && error.code === "SQLITE_CONSTRAINT") {
       console.error(error.message);
