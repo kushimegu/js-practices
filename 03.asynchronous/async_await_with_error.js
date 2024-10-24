@@ -14,7 +14,7 @@ try {
     ]);
     console.log(thisObject.lastID);
   } catch (error) {
-    if (error.code && error.code === "SQLITE_CONSTRAINT") {
+    if (error instanceof Error && error.code === "SQLITE_CONSTRAINT") {
       console.error(error.message);
     } else {
       throw error;
@@ -26,14 +26,14 @@ try {
     ]);
     console.log(row);
   } catch (error) {
-    if (error.code && error.code === "SQLITE_ERROR") {
+    if (error instanceof Error && error.code === "SQLITE_ERROR") {
       console.error(error.message);
     } else {
       throw error;
     }
   }
 } catch (error) {
-  console.error(error.message);
+  console.error(error);
 }
 await run(db, "DROP TABLE books");
 await close(db);
