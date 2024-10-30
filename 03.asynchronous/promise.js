@@ -8,8 +8,8 @@ run(
   "CREATE TABLE books (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL UNIQUE)",
 )
   .then(() => run(db, "INSERT INTO books (title) VALUES (?)", ["JavaScript"]))
-  .then((thisObject) => {
-    console.log(thisObject.lastID);
+  .then((rowDetail) => {
+    console.log(rowDetail.lastID);
     return get(db, "SELECT * FROM books WHERE title = ?", ["JavaScript"]);
   })
   .then((row) => {
