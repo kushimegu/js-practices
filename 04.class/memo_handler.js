@@ -10,9 +10,9 @@ export class MemoHandler {
     this.memoFile = memoFile;
   }
 
-  #loadMemos() {
+  async #loadMemos() {
     try {
-      return this.memoFile.readMemos();
+      return await this.memoFile.readMemos();
     } catch (error) {
       if (error instanceof SyntaxError) {
         throw new Error(`無効なファイルです：${error.message}`);
@@ -26,8 +26,8 @@ export class MemoHandler {
     }
   }
 
-  createMemo() {
-    const memos = this.#loadMemos();
+  async createMemo() {
+    const memos = await this.#loadMemos();
     let writeStream;
     try {
       writeStream = this.memoFile.writeStream();
@@ -46,14 +46,14 @@ export class MemoHandler {
     rl.on("line", (line) => {
       lines.push(line);
     });
-    rl.on("close", () => {
+    rl.on("close", async () => {
       if (lines.length === 0) {
         lines.push("空のメモ");
       }
       const memo = new Memo(lines);
       memos.push(memo);
       try {
-        this.memoFile.writeMemos(memos);
+        await this.memoFile.writeMemos(memos);
       } catch (error) {
         if (error instanceof Error) {
           throw new Error(`メモの書き込みに失敗しました：${error.message}`);
@@ -64,14 +64,14 @@ export class MemoHandler {
     });
   }
 
-  listMemos() {
-    const memos = this.#loadMemos();
+  async listMemos() {
+    const memos = await this.#loadMemos();
     const memoTitles = memos.map((memo) => memo.content[0]);
     memoTitles.forEach((title) => console.log(title));
   }
 
   async #selectMemo(prompt) {
-    const memos = this.#loadMemos();
+    const memos = await this.#loadMemos();
     let answer;
     try {
       answer = await prompt.run();
@@ -86,7 +86,7 @@ export class MemoHandler {
   }
 
   async showMemo() {
-    const memos = this.#loadMemos();
+    const memos = await this.#loadMemos();
     if (memos.length === 0) {
       throw new Error("メモがありません。");
     }
@@ -124,7 +124,7 @@ export class MemoHandler {
     const selectedMemo = await this.#selectMemo(prompt);
     const filteredMemos = memos.filter((memo) => memo.id !== selectedMemo.id);
     try {
-      this.memoFile.saveMemos(filteredMemos);
+      await this.memoFile.saveMemos(filteredMemos);
     } catch (error) {
       if (error instanceof Error) {
         throw new Error(`残りのメモの保存に失敗しました：${error.message}`);

@@ -1,34 +1,53 @@
-import fs, { existsSync, writeFileSync } from "fs";
+import fs, { write } from "node:fs";
 
 export class MemoFile {
   constructor(filePath) {
     this.filePath = filePath;
   }
 
-  initializeFile() {
-    if (
-      !existsSync(this.filePath) ||
-      fs.readFileSync(this.filePath, "utf8").trim() === ""
-    ) {
-      writeFileSync(this.filePath, JSON.stringify([], null, 2));
+  async initializeFile() {
+    try {
+      const fileContents = await fs.promises.readFile(this.filePath, {
+        encoding: "utf8",
+      });
+      if (fileContents.trim() === "") {
+        await fs.promises.writeFile(this.filePath, JSON.stringify([], null, 2));
+      }
+    } catch (error) {
+      if (error instanceof Error && error.code === "ENOENT") {
+        await fs.promises.writeFile(this.filePath, JSON.stringify([], null, 2));
+      } else {
+        throw error;
+      }
     }
   }
 
-  readMemos() {
-    return JSON.parse(fs.readFileSync(this.filePath, "utf8"));
+  async readMemos() {
+    const fileContents = await fs.promises.readFile(this.filePath, {
+      encoding: "utf8",
+    });
+    return JSON.parse(fileContents);
   }
 
   writeStream() {
-    return fs.createWriteStream(this.filePath, {flags: 'r+'});
+    return fs.createWriteStream(this.filePath, { flags: "r+" });
   }
 
   writeMemos(memos) {
-    const writeStream = this.writeStream()
-    writeStream.write(JSON.stringify(memos, null, 2));
-    writeStream.end();
+    return new Promise((resolve, reject) => {
+      const writeStream = this.writeStream();
+      writeStream.write(JSON.stringify(memos, null, 2));
+      writeStream.end();
+      writeStream.on("error", (error) => {
+        reject(error);
+      });
+      writeStream.on("finish", () => {
+        resolve();
+      });
+    });
   }
 
-  saveMemos(memos) {
-    fs.writeFileSync(this.filePath, JSON.stringify(memos, null, 2));
+  async saveMemos(memos) {
+    await fs.promises.writeFile(this.filePath, JSON.stringify(memos, null, 2));
   }
 }
