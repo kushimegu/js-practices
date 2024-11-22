@@ -1,8 +1,8 @@
 import fs from "node:fs";
 
 export class MemoFile {
-  constructor(filePath) {
-    this.filePath = filePath;
+  constructor() {
+    this.filePath = "./memos.json";
   }
 
   async #configureFile() {
@@ -23,7 +23,7 @@ export class MemoFile {
   }
 
   async readMemos() {
-    await this.#configureFile()
+    await this.#configureFile();
     const fileContents = await fs.promises.readFile(this.filePath, {
       encoding: "utf8",
     });
