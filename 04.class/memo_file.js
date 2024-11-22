@@ -1,11 +1,11 @@
-import fs, { write } from "node:fs";
+import fs from "node:fs";
 
 export class MemoFile {
   constructor(filePath) {
     this.filePath = filePath;
   }
 
-  async initializeFile() {
+  async #configureFile() {
     try {
       const fileContents = await fs.promises.readFile(this.filePath, {
         encoding: "utf8",
@@ -23,6 +23,7 @@ export class MemoFile {
   }
 
   async readMemos() {
+    await this.#configureFile()
     const fileContents = await fs.promises.readFile(this.filePath, {
       encoding: "utf8",
     });

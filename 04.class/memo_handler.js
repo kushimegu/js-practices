@@ -70,8 +70,7 @@ export class MemoHandler {
     memoTitles.forEach((title) => console.log(title));
   }
 
-  async #selectMemo(prompt) {
-    const memos = await this.#loadMemos();
+  async #selectMemo(prompt, memos) {
     let answer;
     try {
       answer = await prompt.run();
@@ -101,12 +100,12 @@ export class MemoHandler {
         return this.focused.id;
       },
     });
-    const selectedMemo = await this.#selectMemo(prompt);
+    const selectedMemo = await this.#selectMemo(prompt, memos);
     selectedMemo.content.forEach((line) => console.log(line));
   }
 
   async deleteMemo() {
-    const memos = this.#loadMemos();
+    const memos = await this.#loadMemos();
     if (memos.length === 0) {
       throw new Error("メモがありません。");
     }
@@ -121,7 +120,7 @@ export class MemoHandler {
         return this.focused.id;
       },
     });
-    const selectedMemo = await this.#selectMemo(prompt);
+    const selectedMemo = await this.#selectMemo(prompt, memos);
     const filteredMemos = memos.filter((memo) => memo.id !== selectedMemo.id);
     try {
       await this.memoFile.saveMemos(filteredMemos);
