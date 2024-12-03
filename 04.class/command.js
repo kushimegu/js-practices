@@ -1,6 +1,6 @@
 import { MemoHandler } from "./memo_handler.js";
 
-export class Command {
+export default class Command {
   constructor() {
     this.memoHandler = new MemoHandler();
     this.argv = process.argv.slice(2);

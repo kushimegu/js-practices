@@ -6,7 +6,7 @@ import { MemoFile } from "./memo_file.js";
 
 const { Select } = pkg;
 
-export class MemoHandler {
+export default class MemoHandler {
   constructor() {
     this.memoFile = new MemoFile();
   }

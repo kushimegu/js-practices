@@ -1,6 +1,6 @@
 import fs from "node:fs";
 
-export class MemoFile {
+export default class MemoFile {
   constructor() {
     this.filePath = "./memos.json";
   }
