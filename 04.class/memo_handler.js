@@ -1,13 +1,13 @@
 import readline from "readline";
 import pkg from "enquirer";
 
-import { Memo } from "./class_memo.js";
-import { MemoFile } from "./memo_file.js";
+import Memo from "./class_memo.js";
+import MemoFile from "./memo_file.js";
 
 const { Select } = pkg;
 
 export default class MemoHandler {
-  #memoFile
+  #memoFile;
 
   constructor() {
     this.#memoFile = new MemoFile();

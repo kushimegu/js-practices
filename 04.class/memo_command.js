@@ -1,4 +1,4 @@
-import { MemoHandler } from "./memo_handler.js";
+import MemoHandler from "./memo_handler.js";
 
 export default class MemoCommand {
   #memoHandler
