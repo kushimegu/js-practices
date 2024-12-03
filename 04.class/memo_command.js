@@ -1,9 +1,9 @@
 import MemoHandler from "./memo_handler.js";
 
 export default class MemoCommand {
-  #memoHandler
-  #argv
-  
+  #memoHandler;
+  #argv;
+
   constructor() {
     this.#memoHandler = new MemoHandler();
     this.#argv = process.argv.slice(2);
@@ -24,9 +24,8 @@ export default class MemoCommand {
     } catch (error) {
       if (error instanceof Error) {
         console.error(error.message);
-      } else {
-        throw error;
       }
+      throw error;
     }
   }
 
