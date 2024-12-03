@@ -1,10 +1,8 @@
 import readline from "readline";
-import pkg from "enquirer";
+import enquirer from "enquirer";
 
 import Memo from "./class_memo.js";
 import MemoFile from "./memo_file.js";
-
-const { Select } = pkg;
 
 export default class MemoHandler {
   #memoFile;
@@ -66,7 +64,8 @@ export default class MemoHandler {
       title: memo.content[0],
       id: memo.id,
     }));
-    const prompt = new Select({
+    const prompt = new enquirer.Select({
+      type: 'select',
       message: "閲覧したいメモを選択してください。",
       choices: choices,
       result() {
@@ -86,7 +85,8 @@ export default class MemoHandler {
       title: memo.content[0],
       id: memo.id,
     }));
-    const prompt = new Select({
+    const prompt = new enquirer.Select({
+      type: 'select',
       message: "削除したいメモを選択してください。",
       choices: choices,
       result() {
