@@ -7,15 +7,17 @@ import { MemoFile } from "./memo_file.js";
 const { Select } = pkg;
 
 export default class MemoHandler {
+  #memoFile
+
   constructor() {
-    this.memoFile = new MemoFile();
+    this.#memoFile = new MemoFile();
   }
 
   async createMemo() {
     const memos = await this.#loadMemos();
     let writeStream;
     try {
-      writeStream = this.memoFile.writeStream();
+      writeStream = this.#memoFile.writeStream();
     } catch (error) {
       if (error instanceof Error) {
         throw new Error(`ストリームの作成に失敗しました：${error.message}`);
@@ -38,7 +40,7 @@ export default class MemoHandler {
       const memo = new Memo(lines);
       memos.push(memo);
       try {
-        await this.memoFile.writeMemos(memos);
+        await this.#memoFile.writeMemos(memos);
       } catch (error) {
         if (error instanceof Error) {
           throw new Error(`メモの書き込みに失敗しました：${error.message}`);
@@ -94,7 +96,7 @@ export default class MemoHandler {
     const selectedMemo = await this.#selectMemo(prompt, memos);
     const filteredMemos = memos.filter((memo) => memo.id !== selectedMemo.id);
     try {
-      await this.memoFile.saveMemos(filteredMemos);
+      await this.#memoFile.saveMemos(filteredMemos);
     } catch (error) {
       if (error instanceof Error) {
         throw new Error(`残りのメモの保存に失敗しました：${error.message}`);
@@ -106,7 +108,7 @@ export default class MemoHandler {
 
   async #loadMemos() {
     try {
-      return await this.memoFile.readMemos();
+      return await this.#memoFile.readMemos();
     } catch (error) {
       if (error instanceof SyntaxError) {
         throw new Error(`無効なファイルです：${error.message}`);

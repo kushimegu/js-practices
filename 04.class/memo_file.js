@@ -1,20 +1,22 @@
 import fs from "node:fs";
 
 export default class MemoFile {
+  #filePath
+
   constructor() {
-    this.filePath = "./memos.json";
+    this.#filePath = "./memos.json";
   }
 
   async readMemos() {
     await this.#configureFile();
-    const fileContents = await fs.promises.readFile(this.filePath, {
+    const fileContents = await fs.promises.readFile(this.#filePath, {
       encoding: "utf8",
     });
     return JSON.parse(fileContents);
   }
 
   writeStream() {
-    return fs.createWriteStream(this.filePath, { flags: "r+" });
+    return fs.createWriteStream(this.#filePath, { flags: "r+" });
   }
 
   writeMemos(memos) {
@@ -32,20 +34,20 @@ export default class MemoFile {
   }
 
   async saveMemos(memos) {
-    await fs.promises.writeFile(this.filePath, JSON.stringify(memos, null, 2));
+    await fs.promises.writeFile(this.#filePath, JSON.stringify(memos, null, 2));
   }
 
   async #configureFile() {
     try {
-      const fileContents = await fs.promises.readFile(this.filePath, {
+      const fileContents = await fs.promises.readFile(this.#filePath, {
         encoding: "utf8",
       });
       if (fileContents.trim() === "") {
-        await fs.promises.writeFile(this.filePath, JSON.stringify([], null, 2));
+        await fs.promises.writeFile(this.#filePath, JSON.stringify([], null, 2));
       }
     } catch (error) {
       if (error instanceof Error && error.code === "ENOENT") {
-        await fs.promises.writeFile(this.filePath, JSON.stringify([], null, 2));
+        await fs.promises.writeFile(this.#filePath, JSON.stringify([], null, 2));
       } else {
         throw error;
       }
