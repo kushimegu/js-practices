@@ -11,22 +11,6 @@ export class MemoHandler {
     this.memoFile = new MemoFile();
   }
 
-  async #loadMemos() {
-    try {
-      return await this.memoFile.readMemos();
-    } catch (error) {
-      if (error instanceof SyntaxError) {
-        throw new Error(`無効なファイルです：${error.message}`);
-      } else if (error instanceof Error) {
-        throw new Error(
-          `メモファイルの読み込みに失敗しました：${error.message}`,
-        );
-      } else {
-        throw error;
-      }
-    }
-  }
-
   async createMemo() {
     const memos = await this.#loadMemos();
     let writeStream;
@@ -69,20 +53,6 @@ export class MemoHandler {
     const memos = await this.#loadMemos();
     const memoTitles = memos.map((memo) => memo.content[0]);
     memoTitles.forEach((title) => console.log(title));
-  }
-
-  async #selectMemo(prompt, memos) {
-    let answer;
-    try {
-      answer = await prompt.run();
-    } catch (error) {
-      if (error === "") {
-        throw new Error("メモの選択が中断されました");
-      } else {
-        throw error;
-      }
-    }
-    return memos.find((memo) => memo.id === answer);
   }
 
   async showMemo() {
@@ -132,5 +102,35 @@ export class MemoHandler {
         throw error;
       }
     }
+  }
+
+  async #loadMemos() {
+    try {
+      return await this.memoFile.readMemos();
+    } catch (error) {
+      if (error instanceof SyntaxError) {
+        throw new Error(`無効なファイルです：${error.message}`);
+      } else if (error instanceof Error) {
+        throw new Error(
+          `メモファイルの読み込みに失敗しました：${error.message}`,
+        );
+      } else {
+        throw error;
+      }
+    }
+  }
+
+  async #selectMemo(prompt, memos) {
+    let answer;
+    try {
+      answer = await prompt.run();
+    } catch (error) {
+      if (error === "") {
+        throw new Error("メモの選択が中断されました");
+      } else {
+        throw error;
+      }
+    }
+    return memos.find((memo) => memo.id === answer);
   }
 }

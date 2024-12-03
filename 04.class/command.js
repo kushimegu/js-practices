@@ -6,15 +6,6 @@ export class Command {
     this.argv = process.argv.slice(2);
   }
 
-  #checkOption() {
-    if (
-      this.argv.length >= 2 ||
-      !this.argv.every((option) => ["-l", "-r", "-d"].includes(option))
-    ) {
-      throw new Error("l、r、dからオプションを一つだけ指定してください。");
-    }
-  }
-
   async execute() {
     try {
       this.#checkOption();
@@ -33,6 +24,15 @@ export class Command {
       } else {
         throw error;
       }
+    }
+  }
+
+  #checkOption() {
+    if (
+      this.argv.length >= 2 ||
+      !this.argv.every((option) => ["-l", "-r", "-d"].includes(option))
+    ) {
+      throw new Error("l、r、dからオプションを一つだけ指定してください。");
     }
   }
 }
