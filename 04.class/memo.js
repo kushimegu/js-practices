@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { Command } from "./command.js";
+import { MemoCommand } from "./memo_command.js";
 
-const command = new Command();
+const command = new MemoCommand();
 await command.execute();

@@ -1,6 +1,6 @@
 import { MemoHandler } from "./memo_handler.js";
 
-export default class Command {
+export default class MemoCommand {
   #memoHandler
   #argv
   
