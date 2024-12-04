@@ -30,10 +30,8 @@ export default class MemoCommand {
   }
 
   #checkOption() {
-    if (
-      this.#argv.length >= 2 ||
-      !this.#argv.every((option) => ["-l", "-r", "-d"].includes(option))
-    ) {
+    const validOptions = ["-l", "-r", "-d"];
+    if (this.#argv.length >= 2 || !validOptions.includes(this.#argv[0])) {
       throw new Error("l、r、dからオプションを一つだけ指定してください。");
     }
   }
