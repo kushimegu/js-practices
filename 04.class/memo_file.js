@@ -8,7 +8,7 @@ export default class MemoFile {
   }
 
   async readMemos() {
-    await this.#configureFile();
+    await this.#createFile();
     const fileContents = await fs.promises.readFile(this.#filePath, {
       encoding: "utf8",
     });
@@ -37,14 +37,11 @@ export default class MemoFile {
     await fs.promises.writeFile(this.#filePath, JSON.stringify(memos, null, 2));
   }
 
-  async #configureFile() {
+  async #createFile() {
     try {
-      const fileContents = await fs.promises.readFile(this.#filePath, {
+      await fs.promises.readFile(this.#filePath, {
         encoding: "utf8",
       });
-      if (fileContents.trim() === "") {
-        await fs.promises.writeFile(this.#filePath, JSON.stringify([], null, 2));
-      }
     } catch (error) {
       if (error instanceof Error && error.code === "ENOENT") {
         await fs.promises.writeFile(this.#filePath, JSON.stringify([], null, 2));

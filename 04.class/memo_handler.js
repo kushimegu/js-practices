@@ -110,9 +110,7 @@ export default class MemoHandler {
     try {
       return await this.#memoFile.readMemos();
     } catch (error) {
-      if (error instanceof SyntaxError) {
-        throw new Error(`無効なファイルです：${error.message}`);
-      } else if (error instanceof Error) {
+      if (error instanceof Error) {
         throw new Error(
           `メモファイルの読み込みに失敗しました：${error.message}`,
         );
