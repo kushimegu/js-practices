@@ -42,9 +42,7 @@ export default class MemoHandler {
         throw error;
       }
     }
-    const selectedMemo = memos.find((memo) => {
-      isEqual(memo, answer);
-    });
+    const selectedMemo = memos.find((memo) => isEqual(memo, answer));
     selectedMemo.content.forEach((line) => {
       console.log(line);
     });
@@ -73,17 +71,12 @@ export default class MemoHandler {
         throw error;
       }
     }
-    const selectedMemo = memos.find((memo) => {
-      isEqual(memo, answer);
-    });
-    const filteredMemos = memos.filter((memo) => {
-      !isEqual(memo, selectedMemo);
-    });
+    const selectedMemo = memos.find((memo) => isEqual(memo, answer));
     try {
-      await this.#memoFile.saveMemos(filteredMemos);
+      await this.#memoFile.saveFilteredMemos(memos, selectedMemo);
     } catch (error) {
       if (error instanceof Error) {
-        throw new Error(`残りのメモの保存に失敗しました：${error.message}`);
+        throw new Error(`メモの保存に失敗しました：${error.message}`);
       } else {
         throw error;
       }

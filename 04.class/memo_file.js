@@ -1,4 +1,5 @@
 import fs from "node:fs";
+import isEqual from "lodash.isequal";
 
 export default class MemoFile {
   #filePath;
@@ -43,8 +44,12 @@ export default class MemoFile {
     });
   }
 
-  async saveMemos(memos) {
-    await fs.promises.writeFile(this.#filePath, JSON.stringify(memos, null, 2));
+  async saveFilteredMemos(memos, selectedMemo) {
+    const filteredMemos = memos.filter((memo) => !isEqual(memo, selectedMemo));
+    await fs.promises.writeFile(
+      this.#filePath,
+      JSON.stringify(filteredMemos, null, 2),
+    );
   }
 
   async #createFile() {
