@@ -1,5 +1,6 @@
 import readline from "readline";
 import enquirer from "enquirer";
+import isEqual from "lodash.isequal";
 
 import Memo from "./class_memo.js";
 import MemoFile from "./memo_file.js";
@@ -13,8 +14,7 @@ export default class MemoHandler {
 
   async listMemos() {
     const memos = await this.#loadMemos();
-    const memoTitles = memos.map((memo) => memo.content[0]);
-    memoTitles.forEach((title) => console.log(title));
+    memos.forEach((memo) => console.log(memo.title));
   }
 
   async showMemo() {
@@ -22,19 +22,25 @@ export default class MemoHandler {
     if (memos.length === 0) {
       throw new Error("メモがありません。");
     }
-    const choices = memos.map((memo) => ({
-      title: memo.content[0],
-      id: memo.id,
-    }));
     const prompt = new enquirer.Select({
-      type: 'select',
+      type: "select",
       message: "閲覧したいメモを選択してください。",
-      choices: choices,
+      choices: memos,
       result() {
-        return this.focused.id;
+        return this.focused;
       },
     });
-    const selectedMemo = await this.#selectMemo(prompt, memos);
+    let answer;
+    try {
+      answer = await prompt.run();
+    } catch (error) {
+      if (error === "") {
+        throw new Error("メモの選択が中断されました");
+      } else {
+        throw error;
+      }
+    }
+    const selectedMemo = memos.find((memo) => isEqual(memo, answer));
     selectedMemo.content.forEach((line) => console.log(line));
   }
 
@@ -43,20 +49,26 @@ export default class MemoHandler {
     if (memos.length === 0) {
       throw new Error("メモがありません。");
     }
-    const choices = memos.map((memo) => ({
-      title: memo.content[0],
-      id: memo.id,
-    }));
     const prompt = new enquirer.Select({
-      type: 'select',
+      type: "select",
       message: "削除したいメモを選択してください。",
-      choices: choices,
+      choices: memos,
       result() {
-        return this.focused.id;
+        return this.focused;
       },
     });
-    const selectedMemo = await this.#selectMemo(prompt, memos);
-    const filteredMemos = memos.filter((memo) => memo.id !== selectedMemo.id);
+    let answer;
+    try {
+      answer = await prompt.run();
+    } catch (error) {
+      if (error === "") {
+        throw new Error("メモの選択が中断されました");
+      } else {
+        throw error;
+      }
+    }
+    const selectedMemo = memos.find((memo) => isEqual(memo, answer));
+    const filteredMemos = memos.filter((memo) => !isEqual(memo, selectedMemo));
     try {
       await this.#memoFile.saveMemos(filteredMemos);
     } catch (error) {
@@ -105,7 +117,7 @@ export default class MemoHandler {
       }
     });
   }
-  
+
   async #loadMemos() {
     try {
       return await this.#memoFile.readMemos();
@@ -120,17 +132,17 @@ export default class MemoHandler {
     }
   }
 
-  async #selectMemo(prompt, memos) {
-    let answer;
-    try {
-      answer = await prompt.run();
-    } catch (error) {
-      if (error === "") {
-        throw new Error("メモの選択が中断されました");
-      } else {
-        throw error;
-      }
-    }
-    return memos.find((memo) => memo.id === answer);
-  }
+  // async #selectMemo(prompt, memos) {
+  //   let answer;
+  //   try {
+  //     answer = await prompt.run();
+  //   } catch (error) {
+  //     if (error === "") {
+  //       throw new Error("メモの選択が中断されました");
+  //     } else {
+  //       throw error;
+  //     }
+  //   }
+  //   return memos.find((memo) => memo.id === answer);
+  // }
 }
