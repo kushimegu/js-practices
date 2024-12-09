@@ -13,12 +13,12 @@ export default class MemoHandler {
   }
 
   async listMemos() {
-    const memos = await this.#loadMemos();
+    const memos = await this.#memoFile.readMemos()
     memos.forEach((memo) => console.log(memo.title));
   }
 
   async showMemo() {
-    const memos = await this.#loadMemos();
+    const memos = await this.#memoFile.readMemos()
     if (memos.length === 0) {
       throw new Error("メモがありません。");
     }
@@ -45,7 +45,7 @@ export default class MemoHandler {
   }
 
   async deleteMemo() {
-    const memos = await this.#loadMemos();
+    const memos = await this.#memoFile.readMemos()
     if (memos.length === 0) {
       throw new Error("メモがありません。");
     }
@@ -81,7 +81,7 @@ export default class MemoHandler {
   }
 
   async createMemo() {
-    const memos = await this.#loadMemos();
+    const memos = await this.#memoFile.readMemos()
     let writeStream;
     try {
       writeStream = this.#memoFile.writeStream();
@@ -117,32 +117,4 @@ export default class MemoHandler {
       }
     });
   }
-
-  async #loadMemos() {
-    try {
-      return await this.#memoFile.readMemos();
-    } catch (error) {
-      if (error instanceof Error) {
-        throw new Error(
-          `メモファイルの読み込みに失敗しました：${error.message}`,
-        );
-      } else {
-        throw error;
-      }
-    }
-  }
-
-  // async #selectMemo(prompt, memos) {
-  //   let answer;
-  //   try {
-  //     answer = await prompt.run();
-  //   } catch (error) {
-  //     if (error === "") {
-  //       throw new Error("メモの選択が中断されました");
-  //     } else {
-  //       throw error;
-  //     }
-  //   }
-  //   return memos.find((memo) => memo.id === answer);
-  // }
 }

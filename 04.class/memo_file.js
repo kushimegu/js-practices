@@ -1,7 +1,7 @@
 import fs from "node:fs";
 
 export default class MemoFile {
-  #filePath
+  #filePath;
 
   constructor() {
     this.#filePath = "./memos.json";
@@ -9,10 +9,20 @@ export default class MemoFile {
 
   async readMemos() {
     await this.#createFile();
-    const fileContents = await fs.promises.readFile(this.#filePath, {
-      encoding: "utf8",
-    });
-    return JSON.parse(fileContents);
+    try {
+      const fileContents = await fs.promises.readFile(this.#filePath, {
+        encoding: "utf8",
+      });
+      return JSON.parse(fileContents);
+    } catch (error) {
+      if (error instanceof Error) {
+        throw new Error(
+          `メモファイルの読み込みに失敗しました：${error.message}`,
+        );
+      } else {
+        throw error;
+      }
+    }
   }
 
   writeStream() {
@@ -44,7 +54,10 @@ export default class MemoFile {
       });
     } catch (error) {
       if (error instanceof Error && error.code === "ENOENT") {
-        await fs.promises.writeFile(this.#filePath, JSON.stringify([], null, 2));
+        await fs.promises.writeFile(
+          this.#filePath,
+          JSON.stringify([], null, 2),
+        );
       } else {
         throw error;
       }
