@@ -13,12 +13,14 @@ export default class MemoHandler {
   }
 
   async listMemos() {
-    const memos = await this.#memoFile.readMemos()
-    memos.forEach((memo) => console.log(memo.title));
+    const memos = await this.#memoFile.readMemos();
+    memos.forEach((memo) => {
+      console.log(memo.title);
+    });
   }
 
   async showMemo() {
-    const memos = await this.#memoFile.readMemos()
+    const memos = await this.#memoFile.readMemos();
     if (memos.length === 0) {
       throw new Error("メモがありません。");
     }
@@ -40,12 +42,16 @@ export default class MemoHandler {
         throw error;
       }
     }
-    const selectedMemo = memos.find((memo) => isEqual(memo, answer));
-    selectedMemo.content.forEach((line) => console.log(line));
+    const selectedMemo = memos.find((memo) => {
+      isEqual(memo, answer);
+    });
+    selectedMemo.content.forEach((line) => {
+      console.log(line);
+    });
   }
 
   async deleteMemo() {
-    const memos = await this.#memoFile.readMemos()
+    const memos = await this.#memoFile.readMemos();
     if (memos.length === 0) {
       throw new Error("メモがありません。");
     }
@@ -67,8 +73,12 @@ export default class MemoHandler {
         throw error;
       }
     }
-    const selectedMemo = memos.find((memo) => isEqual(memo, answer));
-    const filteredMemos = memos.filter((memo) => !isEqual(memo, selectedMemo));
+    const selectedMemo = memos.find((memo) => {
+      isEqual(memo, answer);
+    });
+    const filteredMemos = memos.filter((memo) => {
+      !isEqual(memo, selectedMemo);
+    });
     try {
       await this.#memoFile.saveMemos(filteredMemos);
     } catch (error) {
@@ -81,7 +91,7 @@ export default class MemoHandler {
   }
 
   async createMemo() {
-    const memos = await this.#memoFile.readMemos()
+    const memos = await this.#memoFile.readMemos();
     let writeStream;
     try {
       writeStream = this.#memoFile.writeStream();
