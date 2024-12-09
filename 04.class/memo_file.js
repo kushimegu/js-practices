@@ -26,30 +26,13 @@ export default class MemoFile {
     }
   }
 
-  writeStream() {
-    return fs.createWriteStream(this.#filePath, { flags: "r+" });
-  }
-
-  writeMemos(memos) {
-    return new Promise((resolve, reject) => {
-      const writeStream = this.writeStream();
-      writeStream.write(JSON.stringify(memos, null, 2));
-      writeStream.end();
-      writeStream.on("error", (error) => {
-        reject(error);
-      });
-      writeStream.on("finish", () => {
-        resolve();
-      });
-    });
+  async writeMemos(memos) {
+    await fs.promises.writeFile(this.#filePath, JSON.stringify(memos, null, 2));
   }
 
   async saveFilteredMemos(memos, selectedMemo) {
     const filteredMemos = memos.filter((memo) => !isEqual(memo, selectedMemo));
-    await fs.promises.writeFile(
-      this.#filePath,
-      JSON.stringify(filteredMemos, null, 2),
-    );
+    await this.writeMemos(filteredMemos);
   }
 
   async #createFile() {

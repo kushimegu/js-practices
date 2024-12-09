@@ -85,39 +85,33 @@ export default class MemoHandler {
 
   async createMemo() {
     const memos = await this.#memoFile.readMemos();
-    let writeStream;
-    try {
-      writeStream = this.#memoFile.writeStream();
-    } catch (error) {
-      if (error instanceof Error) {
-        throw new Error(`ストリームの作成に失敗しました：${error.message}`);
-      } else {
-        throw error;
-      }
-    }
     const rl = readline.createInterface({
       input: process.stdin,
-      output: writeStream,
     });
     const lines = [];
     rl.on("line", (line) => {
       lines.push(line);
     });
-    rl.on("close", async () => {
-      if (lines.length === 0) {
-        lines.push("空のメモ");
+    await this.#close(rl);
+    if (lines.length === 0) {
+      lines.push("空のメモ");
+    }
+    const memo = new Memo(lines);
+    memos.push(memo);
+    try {
+      await this.#memoFile.writeMemos(memos);
+    } catch (error) {
+      if (error instanceof Error) {
+        throw new Error(`メモの書き込みに失敗しました：${error.message}`);
+      } else {
+        throw error;
       }
-      const memo = new Memo(lines);
-      memos.push(memo);
-      try {
-        await this.#memoFile.writeMemos(memos);
-      } catch (error) {
-        if (error instanceof Error) {
-          throw new Error(`メモの書き込みに失敗しました：${error.message}`);
-        } else {
-          throw error;
-        }
-      }
+    }
+  }
+  
+  #close(readline) {
+    return new Promise((resolve) => {
+      readline.on("close", resolve);
     });
   }
 }
