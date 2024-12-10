@@ -1,20 +1,25 @@
 import fs from "node:fs";
+import readline from "readline";
 import isEqual from "lodash.isequal";
 
 export default class MemoFile {
   #filePath;
 
   constructor() {
-    this.#filePath = "./memos.json";
+    this.#filePath = "./memos.jsonl";
   }
 
   async readMemos() {
     await this.#createFile();
+    const memos = [];
+    const rl = readline.createInterface({
+      input: fs.createReadStream(this.#filePath),
+    });
     try {
-      const fileContents = await fs.promises.readFile(this.#filePath, {
-        encoding: "utf8",
-      });
-      return JSON.parse(fileContents);
+      for await (const line of rl) {
+        const memo = JSON.parse(line);
+        memos.push(memo);
+      }
     } catch (error) {
       if (error instanceof Error) {
         throw new Error(
@@ -24,15 +29,20 @@ export default class MemoFile {
         throw error;
       }
     }
-  }
-
-  async writeMemos(memos) {
-    await fs.promises.writeFile(this.#filePath, JSON.stringify(memos, null, 2));
+    return memos;
   }
 
   async saveFilteredMemos(memos, selectedMemo) {
     const filteredMemos = memos.filter((memo) => !isEqual(memo, selectedMemo));
-    await this.writeMemos(filteredMemos);
+    const memoLines = filteredMemos
+      .map((memo) => JSON.stringify(memo))
+      .join("\n");
+    await fs.promises.writeFile(this.#filePath, memoLines);
+  }
+
+  async appendMemo(memo) {
+    const memoLine = JSON.stringify(memo) + "\n";
+    await fs.promises.appendFile(this.#filePath, memoLine);
   }
 
   async #createFile() {
@@ -44,7 +54,7 @@ export default class MemoFile {
       if (error instanceof Error && error.code === "ENOENT") {
         await fs.promises.writeFile(
           this.#filePath,
-          JSON.stringify([], null, 2),
+          JSON.stringify({}, null, 2),
         );
       } else {
         throw error;

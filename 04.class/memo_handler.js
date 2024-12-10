@@ -84,7 +84,6 @@ export default class MemoHandler {
   }
 
   async createMemo() {
-    const memos = await this.#memoFile.readMemos();
     const rl = readline.createInterface({
       input: process.stdin,
     });
@@ -97,9 +96,8 @@ export default class MemoHandler {
       lines.push("空のメモ");
     }
     const memo = new Memo(lines);
-    memos.push(memo);
     try {
-      await this.#memoFile.writeMemos(memos);
+      await this.#memoFile.appendMemo(memo)
     } catch (error) {
       if (error instanceof Error) {
         throw new Error(`メモの書き込みに失敗しました：${error.message}`);
@@ -108,7 +106,7 @@ export default class MemoHandler {
       }
     }
   }
-  
+
   #close(readline) {
     return new Promise((resolve) => {
       readline.on("close", resolve);
