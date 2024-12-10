@@ -10,7 +10,7 @@ export default class MemoFile {
   }
 
   async readMemos() {
-    await this.#createFile();
+    await this.#assureFileExistence();
     const memos = [];
     const rl = readline.createInterface({
       input: fs.createReadStream(this.#filePath),
@@ -45,7 +45,7 @@ export default class MemoFile {
     await fs.promises.appendFile(this.#filePath, memoLine);
   }
 
-  async #createFile() {
+  async #assureFileExistence() {
     try {
       await fs.promises.readFile(this.#filePath, {
         encoding: "utf8",
