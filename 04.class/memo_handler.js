@@ -76,7 +76,7 @@ export default class MemoHandler {
       await this.#memoFile.saveFilteredMemos(memos, selectedMemo);
     } catch (error) {
       if (error instanceof Error) {
-        throw new Error(`メモの保存に失敗しました：${error.message}`);
+        throw new Error(`メモの削除に失敗しました：${error.message}`);
       } else {
         throw error;
       }
