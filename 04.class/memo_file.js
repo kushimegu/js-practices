@@ -52,10 +52,7 @@ export default class MemoFile {
       });
     } catch (error) {
       if (error instanceof Error && error.code === "ENOENT") {
-        await fs.promises.writeFile(
-          this.#filePath,
-          ''
-        );
+        await fs.promises.writeFile(this.#filePath, "");
       } else {
         throw error;
       }

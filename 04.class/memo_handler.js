@@ -88,16 +88,15 @@ export default class MemoHandler {
       input: process.stdin,
     });
     const lines = [];
-    rl.on("line", (line) => {
+    for await (const line of rl) {
       lines.push(line);
-    });
-    await this.#close(rl);
+    }
     if (lines.length === 0) {
       lines.push("空のメモ");
     }
     const memo = new Memo(lines);
     try {
-      await this.#memoFile.appendMemo(memo)
+      await this.#memoFile.appendMemo(memo);
     } catch (error) {
       if (error instanceof Error) {
         throw new Error(`メモの書き込みに失敗しました：${error.message}`);
@@ -105,11 +104,5 @@ export default class MemoHandler {
         throw error;
       }
     }
-  }
-
-  #close(readline) {
-    return new Promise((resolve) => {
-      readline.on("close", resolve);
-    });
   }
 }
