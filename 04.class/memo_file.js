@@ -34,9 +34,8 @@ export default class MemoFile {
 
   async saveFilteredMemos(memos, selectedMemo) {
     const filteredMemos = memos.filter((memo) => !isEqual(memo, selectedMemo));
-    const memoLines = filteredMemos
-      .map((memo) => JSON.stringify(memo))
-      .join("\n");
+    const memoLines =
+      filteredMemos.map((memo) => JSON.stringify(memo)).join("\n") + "\n";
     await fs.promises.writeFile(this.#filePath, memoLines);
   }
 
