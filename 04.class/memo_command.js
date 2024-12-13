@@ -24,8 +24,10 @@ export default class MemoCommand {
     } catch (error) {
       if (error instanceof Error) {
         console.error(error.message);
+        process.exit(1);
+      } else {
+        throw error;
       }
-      throw error;
     }
   }
 
