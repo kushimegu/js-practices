@@ -26,7 +26,10 @@ export default class MemoHandler {
     const prompt = new enquirer.Select({
       type: "select",
       message: "閲覧したいメモを選択してください。",
-      choices: memos,
+      choices: memos.map(memo => ({
+        ...memo,
+        title: memo.contents[0]
+      })),
       result() {
         return this.focused;
       },
@@ -41,7 +44,7 @@ export default class MemoHandler {
         throw error;
       }
     }
-    selectedMemo.content.forEach((line) => {
+    selectedMemo.contents.forEach((line) => {
       console.log(line);
     });
   }
@@ -54,7 +57,10 @@ export default class MemoHandler {
     const prompt = new enquirer.Select({
       type: "select",
       message: "削除したいメモを選択してください。",
-      choices: memos,
+      choices: memos.map(memo => ({
+        ...memo,
+        title: memo.contents[0]
+      })),
       result() {
         return this.focused;
       },
@@ -69,7 +75,7 @@ export default class MemoHandler {
         throw error;
       }
     }
-      await this.#memoFile.saveFilteredMemos(memos, selectedMemo);
+    await this.#memoFile.saveFilteredMemos(memos, selectedMemo);
   }
 
   async createMemo() {
@@ -84,6 +90,6 @@ export default class MemoHandler {
       lines.push("空のメモ");
     }
     const memo = new Memo(lines);
-      await this.#memoFile.appendMemo(memo);
+    await this.#memoFile.appendMemo(memo);
   }
 }

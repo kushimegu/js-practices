@@ -1,6 +1,5 @@
 import fs from "node:fs";
 import readline from "readline";
-import isEqual from "lodash.isequal";
 
 export default class MemoFile {
   #filePath;
@@ -33,9 +32,14 @@ export default class MemoFile {
   }
 
   async saveFilteredMemos(memos, selectedMemo) {
-    const filteredMemos = memos.filter((memo) => !isEqual(memo, selectedMemo));
-    const memoLines =
+    const filteredMemos = memos.filter((memo) => memo.id !== selectedMemo.id);
+    let memoLines;
+    if (filteredMemos.length === 0) {
+      memoLines = "";
+    } else {
+      memoLines =
       filteredMemos.map((memo) => JSON.stringify(memo)).join("\n") + "\n";
+    }
     await fs.promises.writeFile(this.#filePath, memoLines);
   }
 
