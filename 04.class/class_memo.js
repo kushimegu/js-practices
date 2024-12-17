@@ -1,9 +1,9 @@
 import crypto from "crypto";
 
 export default class Memo {
-  constructor(content) {
+  constructor(contents) {
     this.id = crypto.randomUUID();
-    this.content = content;
-    this.title = content[0];
+    this.content = contents;
+    this.title = contents[0];
   }
 }
