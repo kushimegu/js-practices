@@ -1,6 +1,5 @@
 import readline from "readline";
 import enquirer from "enquirer";
-import isEqual from "lodash.isequal";
 
 import Memo from "./class_memo.js";
 import MemoFile from "./memo_file.js";
@@ -32,9 +31,9 @@ export default class MemoHandler {
         return this.focused;
       },
     });
-    let answer;
+    let selectedMemo;
     try {
-      answer = await prompt.run();
+      selectedMemo = await prompt.run();
     } catch (error) {
       if (error === "") {
         throw new Error("メモの選択が中断されました");
@@ -42,7 +41,6 @@ export default class MemoHandler {
         throw error;
       }
     }
-    const selectedMemo = memos.find((memo) => isEqual(memo, answer));
     selectedMemo.content.forEach((line) => {
       console.log(line);
     });
@@ -61,9 +59,9 @@ export default class MemoHandler {
         return this.focused;
       },
     });
-    let answer;
+    let selectedMemo;
     try {
-      answer = await prompt.run();
+      selectedMemo = await prompt.run();
     } catch (error) {
       if (error === "") {
         throw new Error("メモの選択が中断されました");
@@ -71,7 +69,6 @@ export default class MemoHandler {
         throw error;
       }
     }
-    const selectedMemo = memos.find((memo) => isEqual(memo, answer));
     try {
       await this.#memoFile.saveFilteredMemos(memos, selectedMemo);
     } catch (error) {
