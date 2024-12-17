@@ -69,15 +69,7 @@ export default class MemoHandler {
         throw error;
       }
     }
-    try {
       await this.#memoFile.saveFilteredMemos(memos, selectedMemo);
-    } catch (error) {
-      if (error instanceof Error) {
-        throw new Error(`メモの削除に失敗しました：${error.message}`);
-      } else {
-        throw error;
-      }
-    }
   }
 
   async createMemo() {
@@ -92,14 +84,6 @@ export default class MemoHandler {
       lines.push("空のメモ");
     }
     const memo = new Memo(lines);
-    try {
       await this.#memoFile.appendMemo(memo);
-    } catch (error) {
-      if (error instanceof Error) {
-        throw new Error(`メモの書き込みに失敗しました：${error.message}`);
-      } else {
-        throw error;
-      }
-    }
   }
 }
