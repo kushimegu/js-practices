@@ -1,7 +1,7 @@
 import readline from "readline";
 import enquirer from "enquirer";
+import crypto from "crypto";
 
-import Memo from "./class_memo.js";
 import MemoFile from "./memo_file.js";
 
 export default class MemoHandler {
@@ -26,9 +26,9 @@ export default class MemoHandler {
     const prompt = new enquirer.Select({
       type: "select",
       message: "閲覧したいメモを選択してください。",
-      choices: memos.map(memo => ({
+      choices: memos.map((memo) => ({
         ...memo,
-        title: memo.contents[0]
+        title: memo.contents[0],
       })),
       result() {
         return this.focused;
@@ -57,9 +57,9 @@ export default class MemoHandler {
     const prompt = new enquirer.Select({
       type: "select",
       message: "削除したいメモを選択してください。",
-      choices: memos.map(memo => ({
+      choices: memos.map((memo) => ({
         ...memo,
-        title: memo.contents[0]
+        title: memo.contents[0],
       })),
       result() {
         return this.focused;
@@ -89,7 +89,7 @@ export default class MemoHandler {
     if (lines.length === 0) {
       lines.push("空のメモ");
     }
-    const memo = new Memo(lines);
+    const memo = { id: crypto.randomUUID(), contents: lines };
     await this.#memoFile.appendMemo(memo);
   }
 }
