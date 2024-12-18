@@ -21,7 +21,8 @@ export default class MemoHandler {
   async showMemo() {
     const memos = await this.#memoFile.readMemos();
     if (memos.length === 0) {
-      throw new Error("メモがありません。");
+      console.log("メモがありません。");
+      return;
     }
     const prompt = new enquirer.Select({
       type: "select",
@@ -52,7 +53,8 @@ export default class MemoHandler {
   async deleteMemo() {
     const memos = await this.#memoFile.readMemos();
     if (memos.length === 0) {
-      throw new Error("メモがありません。");
+      console.log("メモがありません。");
+      return;
     }
     const prompt = new enquirer.Select({
       type: "select",
