@@ -31,21 +31,23 @@ export default class MemoFile {
     return memos;
   }
 
-  async saveFilteredMemos(memos, selectedMemo) {
-    const filteredMemos = memos.filter((memo) => memo.id !== selectedMemo.id);
-    let memoLines;
-    if (filteredMemos.length === 0) {
-      memoLines = "";
-    } else {
-      memoLines =
-      filteredMemos.map((memo) => JSON.stringify(memo)).join("\n") + "\n";
-    }
-    await fs.promises.writeFile(this.#filePath, memoLines);
+  async deleteMemo(memos, selectedMemo) {
+    await fs.promises.writeFile(this.#filePath, "");
+    await memos.forEach((memo) => {
+      if (memo.id !== selectedMemo.id) {
+        this.appendMemo(memo);
+      }
+    });
   }
 
   async appendMemo(memo) {
-    const memoLine = JSON.stringify(memo) + "\n";
-    await fs.promises.appendFile(this.#filePath, memoLine);
+    if (memo !== "") {
+      await fs.promises.appendFile(this.#filePath, this.#formatMemo(memo));
+    }
+  }
+
+  #formatMemo(memo){
+    return JSON.stringify(memo)+ "\n"
   }
 
   async #ensureFileExistence() {

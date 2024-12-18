@@ -75,7 +75,7 @@ export default class MemoHandler {
         throw error;
       }
     }
-    await this.#memoFile.saveFilteredMemos(memos, selectedMemo);
+    await this.#memoFile.deleteMemo(memos, selectedMemo);
   }
 
   async createMemo() {
