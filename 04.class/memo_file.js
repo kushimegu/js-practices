@@ -32,20 +32,16 @@ export default class MemoFile {
   }
 
   async deleteMemo(memos, selectedMemo) {
-    await fs.promises.writeFile(this.#filePath, "");
-    await memos.forEach((memo) => {
+    await this.#clearFile();
+    for (const memo of memos) {
       if (memo.id !== selectedMemo.id) {
-        this.appendMemo(memo);
+        await this.appendMemo(memo);
       }
-    });
+    }
   }
 
   async appendMemo(memo) {
-      await fs.promises.appendFile(this.#filePath, this.#formatMemo(memo));
-  }
-
-  #formatMemo(memo){
-    return JSON.stringify(memo)+ "\n"
+    await fs.promises.appendFile(this.#filePath, this.#formatMemo(memo));
   }
 
   async #ensureFileExistence() {
@@ -60,5 +56,13 @@ export default class MemoFile {
         throw error;
       }
     }
+  }
+
+  async #clearFile() {
+    await fs.promises.writeFile(this.#filePath, "");
+  }
+
+  #formatMemo(memo) {
+    return JSON.stringify(memo) + "\n";
   }
 }
