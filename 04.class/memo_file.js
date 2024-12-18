@@ -41,9 +41,7 @@ export default class MemoFile {
   }
 
   async appendMemo(memo) {
-    if (memo !== "") {
       await fs.promises.appendFile(this.#filePath, this.#formatMemo(memo));
-    }
   }
 
   #formatMemo(memo){
