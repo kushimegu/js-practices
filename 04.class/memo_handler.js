@@ -14,7 +14,7 @@ export default class MemoHandler {
   async listMemos() {
     const memos = await this.#memoFile.readMemos();
     memos.forEach((memo) => {
-      console.log(memo.title);
+      console.log(memo.contents[0]);
     });
   }
 
