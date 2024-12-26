@@ -1,5 +1,4 @@
 import fs from "node:fs";
-import readline from "readline";
 
 export default class MemoFile {
   #filePath;
@@ -10,15 +9,12 @@ export default class MemoFile {
 
   async readMemos() {
     await this.#ensureFileExistence();
-    const memos = [];
-    const rl = readline.createInterface({
-      input: fs.createReadStream(this.#filePath),
-    });
+
+    let memoFile;
     try {
-      for await (const line of rl) {
-        const memo = JSON.parse(line);
-        memos.push(memo);
-      }
+      memoFile = await fs.promises.readFile(this.#filePath, {
+        encoding: "utf8",
+      });
     } catch (error) {
       if (error instanceof Error) {
         throw new Error(
@@ -28,6 +24,10 @@ export default class MemoFile {
         throw error;
       }
     }
+
+    const memos = this.#deserializeJsonLines(
+      memoFile.split("\n").filter((memo) => memo !== ""),
+    );
     return memos;
   }
 
@@ -41,7 +41,10 @@ export default class MemoFile {
   }
 
   async appendMemo(memo) {
-    await fs.promises.appendFile(this.#filePath, this.#formatMemo(memo));
+    await fs.promises.appendFile(
+      this.#filePath,
+      this.#serializeToJsonLine(memo),
+    );
   }
 
   async #ensureFileExistence() {
@@ -62,7 +65,11 @@ export default class MemoFile {
     await fs.promises.writeFile(this.#filePath, "");
   }
 
-  #formatMemo(memo) {
-    return JSON.stringify(memo) + "\n";
+  #deserializeJsonLines(lines) {
+    return lines.map((line) => JSON.parse(line));
+  }
+
+  #serializeToJsonLine(line) {
+    return JSON.stringify(line) + "\n";
   }
 }
