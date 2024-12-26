@@ -24,6 +24,7 @@ export default class MemoHandler {
       console.log("メモがありません。");
       return;
     }
+
     const prompt = new enquirer.Select({
       type: "select",
       message: "閲覧したいメモを選択してください。",
@@ -35,6 +36,7 @@ export default class MemoHandler {
         return this.focused;
       },
     });
+
     let selectedMemo;
     try {
       selectedMemo = await prompt.run();
@@ -56,6 +58,7 @@ export default class MemoHandler {
       console.log("メモがありません。");
       return;
     }
+
     const prompt = new enquirer.Select({
       type: "select",
       message: "削除したいメモを選択してください。",
@@ -67,6 +70,7 @@ export default class MemoHandler {
         return this.focused;
       },
     });
+
     let selectedMemo;
     try {
       selectedMemo = await prompt.run();
@@ -77,7 +81,7 @@ export default class MemoHandler {
         throw error;
       }
     }
-    await this.#memoFile.deleteMemo(memos, selectedMemo);
+    await this.#memoFile.deleteMemo(selectedMemo);
   }
 
   async createMemo() {
