@@ -84,14 +84,14 @@ export default class MemoHandler {
     const rl = readline.createInterface({
       input: process.stdin,
     });
-    const lines = [];
+    const contents = [];
     for await (const line of rl) {
-      lines.push(line);
+      contents.push(line);
     }
-    if (lines.length === 0) {
+    if (contents.length === 0) {
       return;
     }
-    const memo = { id: crypto.randomUUID(), contents: lines };
+    const memo = { id: crypto.randomUUID(), contents };
     await this.#memoFile.appendMemo(memo);
   }
 }
