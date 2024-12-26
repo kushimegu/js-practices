@@ -89,7 +89,7 @@ export default class MemoHandler {
       lines.push(line);
     }
     if (lines.length === 0) {
-      lines.push("空のメモ");
+      return;
     }
     const memo = { id: crypto.randomUUID(), contents: lines };
     await this.#memoFile.appendMemo(memo);
