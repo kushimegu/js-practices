@@ -32,12 +32,9 @@ export default class MemoFile {
   }
 
   async deleteMemo(memos, selectedMemo) {
-    await this.#clearFile();
-    for (const memo of memos) {
-      if (memo.id !== selectedMemo.id) {
-        await this.appendMemo(memo);
-      }
-    }
+    const filteredMemos = memos.filter((memo) => memo.id !== selectedMemo.id);
+    const memoLines = filteredMemos.map(this.#serializeToJsonLine).join("");
+    await fs.promises.writeFile(this.#filePath, memoLines);
   }
 
   async appendMemo(memo) {
@@ -59,10 +56,6 @@ export default class MemoFile {
         throw error;
       }
     }
-  }
-
-  async #clearFile() {
-    await fs.promises.writeFile(this.#filePath, "");
   }
 
   #deserializeJsonLines(lines) {
