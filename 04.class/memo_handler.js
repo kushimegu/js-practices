@@ -29,17 +29,17 @@ export default class MemoHandler {
       type: "select",
       message: "閲覧したいメモを選択してください。",
       choices: memos.map((memo) => ({
-        title: memo.contents[0],
-        contents: memo.contents,
+        name: memo.contents[0],
+        value: memo.contents,
       })),
       result() {
-        return this.focused.contents;
+        return this.focused;
       },
     });
 
-    let selectedMemoContents;
+    let selectedMemo;
     try {
-      selectedMemoContents = await prompt.run();
+      selectedMemo = await prompt.run();
     } catch (error) {
       if (error === "") {
         throw new Error("メモの選択が中断されました");
@@ -47,7 +47,7 @@ export default class MemoHandler {
         throw error;
       }
     }
-    selectedMemoContents.forEach((content) => {
+    selectedMemo.value.forEach((content) => {
       console.log(content);
     });
   }
@@ -63,17 +63,17 @@ export default class MemoHandler {
       type: "select",
       message: "削除したいメモを選択してください。",
       choices: memos.map((memo) => ({
-        id: memo.id,
-        title: memo.contents[0],
+        name: memo.id,
+        value: memo.contents[0],
       })),
       result() {
-        return this.focused.id;
+        return this.focused;
       },
     });
 
-    let selectedMemoId;
+    let selectedMemo;
     try {
-      selectedMemoId = await prompt.run();
+      selectedMemo = await prompt.run();
     } catch (error) {
       if (error === "") {
         throw new Error("メモの選択が中断されました");
@@ -81,7 +81,7 @@ export default class MemoHandler {
         throw error;
       }
     }
-    await this.#memoFile.deleteMemo(selectedMemoId);
+    await this.#memoFile.deleteMemo(selectedMemo);
   }
 
   async createMemo() {

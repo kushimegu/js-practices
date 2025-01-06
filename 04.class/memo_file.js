@@ -31,9 +31,9 @@ export default class MemoFile {
     return memos;
   }
 
-  async deleteMemo(selectedMemoId) {
+  async deleteMemo(selectedMemo) {
     const memos = await this.readMemos();
-    const filteredMemos = memos.filter((memo) => memo.id !== selectedMemoId);
+    const filteredMemos = memos.filter((memo) => memo.id !== selectedMemo.id);
     const memoLines = filteredMemos.map(this.#serializeToJsonLine).join("");
     await fs.promises.writeFile(this.#filePath, memoLines);
   }
