@@ -33,16 +33,15 @@ export default class MemoFile {
 
   async deleteMemo(selectedMemo) {
     const memos = await this.readMemos();
-    const filteredMemos = memos.filter((memo) => memo.id !== selectedMemo.id);
-    const memoLines = filteredMemos.map(this.#serializeToJsonLine).join("");
+    const filteredMemos = memos.filter(
+      (memo) => memo.id !== selectedMemo.value,
+    );
+    const memoLines = this.#serializeToJsonLines(filteredMemos);
     await fs.promises.writeFile(this.#filePath, memoLines);
   }
 
   async appendMemo(memo) {
-    await fs.promises.appendFile(
-      this.#filePath,
-      this.#serializeToJsonLine(memo),
-    );
+    await fs.promises.appendFile(this.#filePath, this.#stringifyLine(memo));
   }
 
   async #ensureFileExistence() {
@@ -63,7 +62,11 @@ export default class MemoFile {
     return lines.map((line) => JSON.parse(line));
   }
 
-  #serializeToJsonLine(line) {
+  #stringifyLine(line) {
     return JSON.stringify(line) + "\n";
+  }
+
+  #serializeToJsonLines(lines) {
+    return lines.map(this.#stringifyLine).join("");
   }
 }
