@@ -63,8 +63,8 @@ export default class MemoHandler {
       type: "select",
       message: "削除したいメモを選択してください。",
       choices: memos.map((memo) => ({
-        name: memo.id,
-        value: memo.contents[0],
+        name: memo.contents[0],
+        value: memo.id,
       })),
       result() {
         return this.focused;
