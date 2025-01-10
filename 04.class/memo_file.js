@@ -41,7 +41,10 @@ export default class MemoFile {
   }
 
   async appendMemo(memo) {
-    await fs.promises.appendFile(this.#filePath, this.#stringifyLine(memo));
+    await fs.promises.appendFile(
+      this.#filePath,
+      this.#stringifyWithNewLine(memo),
+    );
   }
 
   async #ensureFileExistence() {
@@ -62,11 +65,11 @@ export default class MemoFile {
     return lines.map((line) => JSON.parse(line));
   }
 
-  #stringifyLine(line) {
+  #stringifyWithNewLine(line) {
     return JSON.stringify(line) + "\n";
   }
 
   #serializeToJsonLines(lines) {
-    return lines.map(this.#stringifyLine).join("");
+    return lines.map(this.#stringifyWithNewLine).join("");
   }
 }
