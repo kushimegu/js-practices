@@ -9,22 +9,9 @@ export default class MemoFile {
 
   async readMemos() {
     await this.#ensureFileExistence();
-
-    let memoFile;
-    try {
-      memoFile = await fs.promises.readFile(this.#filePath, {
-        encoding: "utf8",
-      });
-    } catch (error) {
-      if (error instanceof Error) {
-        throw new Error(
-          `メモファイルの読み込みに失敗しました：${error.message}`,
-        );
-      } else {
-        throw error;
-      }
-    }
-
+    const memoFile = await fs.promises.readFile(this.#filePath, {
+      encoding: "utf8",
+    });
     const memosArray = memoFile === "" ? [] : memoFile.trimEnd().split("\n");
     const memos = this.#deserializeJsonLines(memosArray);
     return memos;
