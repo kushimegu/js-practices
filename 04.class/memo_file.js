@@ -31,11 +31,10 @@ export default class MemoFile {
     return memos;
   }
 
-  async deleteMemo(selectedMemo) {
+  async deleteMemo(memo) {
     const memos = await this.readMemos();
-    const filteredMemos = memos.filter(
-      (memo) => memo.id !== selectedMemo.value,
-    );
+    const memoId = memo.id;
+    const filteredMemos = memos.filter((memo) => memo.id !== memoId);
     const memoLines = this.#serializeToJsonLines(filteredMemos);
     await fs.promises.writeFile(this.#filePath, memoLines);
   }

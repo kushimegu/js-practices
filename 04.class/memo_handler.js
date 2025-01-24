@@ -30,10 +30,10 @@ export default class MemoHandler {
       message: "閲覧したいメモを選択してください。",
       choices: memos.map((memo) => ({
         name: memo.contents[0],
-        value: memo.contents,
+        value: memo,
       })),
       result() {
-        return this.focused;
+        return this.focused.value;
       },
     });
 
@@ -47,7 +47,7 @@ export default class MemoHandler {
         throw error;
       }
     }
-    selectedMemo.value.forEach((content) => {
+    selectedMemo.contents.forEach((content) => {
       console.log(content);
     });
   }
@@ -64,10 +64,10 @@ export default class MemoHandler {
       message: "削除したいメモを選択してください。",
       choices: memos.map((memo) => ({
         name: memo.contents[0],
-        value: memo.id,
+        value: memo,
       })),
       result() {
-        return this.focused;
+        return this.focused.value;
       },
     });
 
