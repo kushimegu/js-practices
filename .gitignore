@@ -127,4 +127,4 @@ dist
 .pnp.*
 
 # JSONL memo file
-./04.class/memos.jsonl
+04.class/memos.jsonl
