@@ -25,9 +25,8 @@ export default class MemoFile {
       }
     }
 
-    const memos = this.#deserializeJsonLines(
-      memoFile.split("\n").filter((line) => line !== ""),
-    );
+    const memosArray = memoFile === "" ? [] : memoFile.trimEnd().split("\n");
+    const memos = this.#deserializeJsonLines(memosArray);
     return memos;
   }
 
