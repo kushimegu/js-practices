@@ -51,6 +51,6 @@ export default class MemoFile {
   }
 
   #serializeToJsonLines(lines) {
-    return lines.map((line) => JSON.stringify(line) + "\n").join("");
+    return lines.map((line) => JSON.stringify(line)).join("\n");
   }
 }
