@@ -9,18 +9,17 @@ export default class MemoFile {
 
   async readMemos() {
     await this.#ensureFileExistence();
-    const memoFile = await fs.promises.readFile(this.#filePath, {
+    const jsonlMemos = await fs.promises.readFile(this.#filePath, {
       encoding: "utf8",
     });
-    const memosArray = memoFile === "" ? [] : memoFile.trimEnd().split("\n");
-    const memos = this.#deserializeJsonLines(memosArray);
+    const lines = jsonlMemos.split("\n").filter((line) => line !== "");
+    const memos = this.#deserializeJsonLines(lines);
     return memos;
   }
 
   async deleteMemo(memo) {
     const memos = await this.readMemos();
-    const memoId = memo.id;
-    const filteredMemos = memos.filter((memo) => memo.id !== memoId);
+    const filteredMemos = memos.filter((eachMemo) => eachMemo.id !== memo.id);
     const memoLines = this.#serializeToJsonLines(filteredMemos);
     await fs.promises.writeFile(this.#filePath, memoLines);
   }
