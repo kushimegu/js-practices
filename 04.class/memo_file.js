@@ -25,10 +25,10 @@ export default class MemoFile {
   }
 
   async appendMemo(memo) {
-    await fs.promises.appendFile(
-      this.#filePath,
-      this.#serializeToJsonLines([memo]),
-    );
+    const memos = await this.readMemos();
+    memos.push(memo);
+    const memoLines = this.#serializeToJsonLines(memos);
+    await fs.promises.writeFile(this.#filePath, memoLines);
   }
 
   async #ensureFileExistence() {
